@@ -1,10 +1,10 @@
 import requests as req
 
 API_ENDPOINT = "https://api.themoviedb.org/3"
-API_KEY = "4d47a23ec4aa7519055490c1ac209579"
+API_KEY = YOUR-API-KEY
 QUERY_ENDPOINT = API_ENDPOINT + "/search/movie"
 
-
+#give list of movies that matches the title in query
 def get_movie_list(query: str):
     parameters = {
         "api_key": API_KEY,
@@ -17,7 +17,7 @@ def get_movie_list(query: str):
     res.raise_for_status()
     return res.json()['results']
 
-
+#give movies detail by id
 def get_movie(id_: int):
     movie_endpoint = API_ENDPOINT + f"/movie/{id_}"
     parameters = {
