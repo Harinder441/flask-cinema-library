@@ -23,23 +23,12 @@ class Movie(db.Model):
     img_url = db.Column(db.String, nullable=False)
     rating = db.Column(db.Float, nullable=False)
 
-
+#to create model need to run only one time
 with app.app_context():
     # db.create_all()
-    # new_movie = Movie(
-    #     title="Phone Booth",
-    #     year=2002,
-    #     description="Publicist Stuart Shepard finds himself trapped in a phone booth, pinned down by an extortionist's sniper rifle. Unable to leave or receive outside help, Stuart's negotiation with the caller leads to a jaw-dropping climax.",
-    #     rating=7.3,
-    #     ranking=10,
-    #     review="My favourite character was the caller.",
-    #     img_url="https://image.tmdb.org/t/p/w500/tjrX2oWRCM3Tvarz38zlZM7Uc10.jpg"
-    # )
-    # db.session.add(new_movie)
-    # db.session.commit()
     pass
 
-
+#home page list all movies ranked in desc order according to ratings given
 @app.route("/")
 def home():
     all_movies=Movie.query.order_by(Movie.rating.asc()).all()
@@ -50,12 +39,9 @@ def home():
 
     db.session.commit()
 
-
-    # all_movies = db.session.query(Movie).all()
-
     return render_template("index.html", movies=all_movies)
 
-
+#add movies by searching title on moviedatabase api then selecting right movies to add
 @app.route("/add", methods=["GET", "POST"])
 def add():
     form = AddMovie()
@@ -65,6 +51,7 @@ def add():
         movies = get_movie_list(query= data['title'])
         return render_template("select.html", movies=movies)
     return render_template("add.html", form=form)
+
 
 @app.route("/add_movie")
 def add_movie():
@@ -85,7 +72,7 @@ def add_movie():
     return redirect(app.url_for('update', id_=id_))
 
 
-
+#delete perticularmovie by id
 @app.route("/delete/<int:id_>")
 def delete(id_):
     movie_to_delete = Movie.query.get(id_)
@@ -93,6 +80,7 @@ def delete(id_):
     db.session.commit()
     return redirect(app.url_for("home"))
 
+# update rating and review of movie by id
 @app.route("/update/<int:id_>", methods=["POST", "GET"])
 def update(id_):
     movie_to_edit = Movie.query.get(id_)
